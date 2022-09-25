@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="../../plugins/element-ui/index.css" />
+  <link rel="stylesheet" href="../../styles/common.css" />
+  <link rel="stylesheet" href="../../styles/page.css" />
+
+  <link rel="stylesheet" href="list.css">
+
+</head>
+<body style="background: white">
+
+<div id="wrapper" v-cloak>
+  <el-container>
+      <!-- 首页 -->
+      <el-menu :default-openeds="['1']" style="border: none;" background-color="black" text-color="#fff" active-text-color="#ffd04b"
+               default-active="home"
+               class="el-menu-vertical-demo" :collapse="isCollapse">
+        <el-submenu index="1" v-if="user.permission && user.permission.length > 0">
+          <a :href=`${item.path}` v-for="item in user.permission" :key="item.id">
+          </a>
+        </el-submenu>
+      </el-menu>
+    </el-aside>
+    <el-container>
+      <!-- 主体区域 -->
+      <el-main id="elmain">
+          <el-col :span="8",gutter="20">
+            <el-card style="padding: 12px" class="box-card" slot="header">
+              <div style="display: inline-block; padding-right: 20px; vertical-align: middle;" class="clearfix">
+                <img src="../../file/home/home-01.png" style="width: 60px">
+              </div>
+              <div style="display: inline-block; padding-left: 40px; vertical-align: middle;">
+                <div style="color: #455a64; font-size: 24px; padding-bottom: 5px">1048</div>
+                <div style="color: #99abb4;">营销额</div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :span="8",gutter="20">
+            <el-card style="padding: 12px">
+              <div style="display: inline-block; padding-right: 20px; vertical-align: middle;">
+                <img src="../../file/home/home-02.png" style="width: 60px">
+              </div>
+              <div style="display: inline-block; padding-left: 40px; vertical-align: middle;">
+                <div style="color: #455a64; font-size: 24px; padding-bottom: 5px">23</div>
+                <div style="color: #99abb4;">商品量</div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :span="8",gutter="20">
+            <el-card style="padding: 12px">
+              <div style="display: inline-block; padding-right: 20px; vertical-align: middle;">
+                <img src="../../file/home/home-03.png" style="width: 60px">
+              </div>
+              <div style="display: inline-block; padding-left: 40px; vertical-align: middle;">
+                <div style="color: #455a64; font-size: 24px; padding-bottom: 5px">56</div>
+                <div style="color: #99abb4;">订单量</div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+
+      </el-main>
+      <iframe src="./chart.html" style="width: 100%;height: 880px; border: none; display: flex; justify-content: center; margin-top: 75px"></iframe>
+    </el-container>
+  </el-container>
+</div>
+
+</body>
+</html>

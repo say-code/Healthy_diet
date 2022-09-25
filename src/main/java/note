@@ -1,0 +1,21 @@
+后端请求:
+ 后端登录页:http://localhost:8181/backend/page/login/login.html
+ 后端主要展示页/主页:http://localhost:8181/backend/index.html
+消费端请求:
+  消费端登录页:http://localhost:8181/front/page/login.html
+  消费端主页:  http://localhost:8181/front/index.html
+
+菜品数据(Dish)采用Redis来实现缓存
+需要导入依赖:
+     <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-data-redis</artifactId>
+     </dependency>
+
+套餐数据(Setmeal)采用SpringData Cache来实现缓存:
+需要导入依赖:
+      <dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter-cache</artifactId>
+     </dependency>
+
