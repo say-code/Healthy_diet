@@ -3,6 +3,8 @@ package com.healthy.diet.manage.mapper;
 import com.healthy.diet.manage.model.Business;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
+
 /**
  * @author sayCode
  * @date 2022/9/25 21:36
@@ -10,6 +12,7 @@ import org.apache.ibatis.annotations.Mapper;
  * Title: BusinessMapper
  * description: 公司类Mapper
  */
+@Mapper
 public interface BusinessMapper {
 
     /**
@@ -21,10 +24,9 @@ public interface BusinessMapper {
 
     /**
      * 查找 根据公司 id 返回公司名
-     * @param businessId 公司Id
      * @return 公司名
      */
-    String businessNameSelectByBusinessId(String businessId);
+    ArrayList<Business> businessNameSelectAll();
 
     /**
      * 删除 根据公司Id删除公司

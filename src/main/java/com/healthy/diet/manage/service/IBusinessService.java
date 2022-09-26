@@ -2,6 +2,8 @@ package com.healthy.diet.manage.service;
 
 import com.healthy.diet.manage.model.Business;
 
+import java.util.ArrayList;
+
 /**
  * @author sayCode
  * @date 2022/9/25 21:45
@@ -19,10 +21,9 @@ public interface IBusinessService {
 
     /**
      * 查找 根据公司 id 返回公司名
-     * @param businessId 公司Id
      * @return 公司名
      */
-    String businessNameSelectByBusinessId(String businessId);
+    ArrayList<Business> businessNameSelectAll();
 
     /**
      * 删除 根据公司Id删除公司

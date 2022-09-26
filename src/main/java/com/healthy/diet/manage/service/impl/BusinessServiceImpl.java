@@ -4,14 +4,18 @@ import com.healthy.diet.manage.mapper.BusinessMapper;
 import com.healthy.diet.manage.model.Business;
 import com.healthy.diet.manage.service.IBusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 /**
  * @author sayCode
  * @date 2022/9/25 21:50
  * project: Heathy_diet
  * Title: BusinessServiceImpl
- * description: TODO
+ * description: 公司 信息服务实现层
  */
+@Service
 public class BusinessServiceImpl implements IBusinessService {
 
     @Autowired
@@ -23,8 +27,8 @@ public class BusinessServiceImpl implements IBusinessService {
     }
 
     @Override
-    public String businessNameSelectByBusinessId(String businessId) {
-        return businessMapper.businessNameSelectByBusinessId(businessId);
+    public ArrayList<Business> businessNameSelectAll() {
+        return businessMapper.businessNameSelectAll();
     }
 
     @Override

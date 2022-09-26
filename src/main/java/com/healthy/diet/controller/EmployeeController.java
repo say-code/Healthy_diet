@@ -54,6 +54,7 @@ public class EmployeeController {
         }
 
         request.getSession().setAttribute("employee",emp.getId());
+        request.getSession().setAttribute("businessId",emp.getBusinessId());
 
         // 将从数据库
         return Result.success(emp);

@@ -1,5 +1,6 @@
 package com.healthy.diet.manage.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Business {
-
+    @JsonIgnore
     private String businessId;
 
     private String businessName;

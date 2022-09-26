@@ -27,6 +27,8 @@ public class Employee implements Serializable {
 
     private Integer status;
 
+    private String businessId;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
