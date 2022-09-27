@@ -21,4 +21,11 @@
         <include refid="businessColumnList"/>
         from business
     </select>
+
+    <select id="businessNameSelectById" resultType="java.lang.String">
+        select
+            business.business_name
+        from business
+        where business_id = ${businessId}
+    </select>
 </mapper>

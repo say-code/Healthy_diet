@@ -30,6 +30,8 @@ public class LoginCheckFilter implements Filter {
 
         log.info("拦截到的请求:{}",requestURI);
         String[] urls = new String[]{
+                "/manage/login",
+                "/manage/logout",
                 "/employee/login",
                 "/employee/logout",
                 "/backend/**",

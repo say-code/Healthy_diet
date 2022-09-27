@@ -23,10 +23,17 @@ public interface BusinessMapper {
     int businessInsert(Business business);
 
     /**
-     * 查找 根据公司 id 返回公司名
+     * 查找 公司列表
      * @return 公司名
      */
     ArrayList<Business> businessNameSelectAll();
+
+    /**
+     * 根据公司Id查找公司名
+     * @param businessId 公司Id
+     * @return 公司名
+     */
+    String businessNameSelectById(String businessId);
 
     /**
      * 删除 根据公司Id删除公司

@@ -35,4 +35,11 @@ public class BusinessServiceImpl implements IBusinessService {
     public int businessDeleteByBusinessId(String businessId) {
         return businessMapper.businessDeleteByBusinessId(businessId);
     }
+
+    @Override
+    public String businessNameSelectByBusinessId(String businessId) {
+        return businessMapper.businessNameSelectById(businessId);
+    }
+
+
 }

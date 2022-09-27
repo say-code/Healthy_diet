@@ -31,4 +31,11 @@ public interface IBusinessService {
      * @return 是否删除成功
      */
     int businessDeleteByBusinessId(String businessId);
+
+    /**
+     * 根据公司Id查找公司名
+     * @param businessId 公司Id
+     * @return 公司名
+     */
+    String businessNameSelectByBusinessId(String businessId);
 }
