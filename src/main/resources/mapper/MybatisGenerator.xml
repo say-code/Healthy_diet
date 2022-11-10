@@ -7,8 +7,12 @@
         <result column="business_name" jdbcType="VARCHAR" property="businessName"/>
     </resultMap>
 
+    <resultMap id="EmployeeBaseResultMap" type="com.healthy.diet.entity.Employee">
+
+    </resultMap>
+
     <sql id="businessColumnList">
-        business_name
+        business.business_id,business.business_name
     </sql>
 
     <insert id="businessInsert" parameterType="com.healthy.diet.manage.model.Business">
@@ -26,6 +30,24 @@
         select
             business.business_name
         from business
-        where business_id = ${businessId}
+        where business_id = "${businessId,jdbcType=VARCHAR}"
+    </select>
+
+    <select id="businessCount" resultType="java.lang.Integer">
+        select
+            count(business.business_name)
+        from business
+    </select>
+
+    <select id="allBusinessDishCount" resultType="java.lang.Integer">
+        select
+            count(dish.id)
+        from dish
+    </select>
+    
+    <select id="allOrderCount" resultType="java.lang.Integer">
+        select
+            count(orders.id)
+        from orders
     </select>
 </mapper>

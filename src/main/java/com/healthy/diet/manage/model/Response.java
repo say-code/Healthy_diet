@@ -22,11 +22,11 @@ public class Response {
     private String msg;
 
     public static Response success() {
-        return new Response(0, null, "操作成功");
+        return new Response(200, null, "操作成功");
     }
 
     public static Response success(Object data) {
-        return new Response(0, data, "操作成功");
+        return new Response(200, data, "操作成功");
     }
 
     public static Response error() {

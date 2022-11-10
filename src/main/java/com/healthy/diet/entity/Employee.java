@@ -2,6 +2,7 @@ package com.healthy.diet.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.healthy.diet.manage.model.Business;
 import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;

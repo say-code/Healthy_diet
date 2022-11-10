@@ -11,9 +11,9 @@ spring:
       password: TabStudio@3306
       # 邮箱配置
   mail:
-    host: smtp.163.com  # 发送邮件的服务器地址
-    username: xlei1812023@163.com # 登录163邮箱的账号
-    password: XTZMIJKGMWDXDVRI  # 开启 IMAP/SMTP服务 获得的授权码,而不是163邮箱的登录密码
+    host: smtp.qq.com  # 发送邮件的服务器地址
+    username: saycode@foxmail.com # 登录163邮箱的账号
+    password: deepmenjtckmbchi  # 开启 IMAP/SMTP服务 获得的授权码,而不是163邮箱的登录密码
     default-encoding: UTF-8
 
   redis:
@@ -34,4 +34,4 @@ mybatis-plus:
     db-config:
       id-type: ASSIGN_ID
 upload:
-  filePath: F:\桌面\Heathy_diet\project_images\img
+  filePath: F:\HealthyDiet\Heathy_diet\src\main\resources\img\

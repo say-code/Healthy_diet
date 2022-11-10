@@ -43,6 +43,7 @@ public class Setmeal implements Serializable {
     //图片
     private String image;
 
+    private String businessId;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

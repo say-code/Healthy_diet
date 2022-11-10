@@ -1,8 +1,10 @@
 package com.healthy.diet.manage.service;
 
+import com.healthy.diet.entity.Employee;
 import com.healthy.diet.manage.model.Business;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author sayCode
@@ -38,4 +40,24 @@ public interface IBusinessService {
      * @return 公司名
      */
     String businessNameSelectByBusinessId(String businessId);
+
+    /**
+     * 统计公司数量
+     * @return 公司数量
+     */
+    Integer businessCount();
+
+    /**
+     * 总菜品数量统计
+     * @return 菜品数量
+     */
+    Integer allBusinessDishCount();
+
+    /**
+     * 总订单数量统计
+     * @return 总订单数量
+     */
+    Integer allOrderCount();
+
+    List<Employee> selectAllEmployee();
 }

@@ -32,6 +32,8 @@ public class OrderDetail implements Serializable {
     //口味
     private String dishFlavor;
 
+    private String businessId;
+
 
     //数量
     private Integer number;

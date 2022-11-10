@@ -16,5 +16,7 @@ public class DishDto extends Dish {
 
     private String categoryName;
 
+    private String businessName;
+
     private Integer copies;
 }

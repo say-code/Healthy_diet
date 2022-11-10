@@ -31,6 +31,7 @@ public class LoginCheckFilter implements Filter {
         log.info("拦截到的请求:{}",requestURI);
         String[] urls = new String[]{
                 "/manage/login",
+                "/favicon.ico",
                 "/manage/logout",
                 "/employee/login",
                 "/employee/logout",
@@ -38,7 +39,8 @@ public class LoginCheckFilter implements Filter {
                 "/front/**",
                 "/common/**",
                 "/user/sendMsg",  // 移动端 发送短信
-                "/user/login"     //  移动端登录
+                "/user/login"    , //
+                "/wx/api/**"
         };
         // 2、判断本次请求是否需要处理(该次访问是否处于登录状态)
         boolean checkLogin = isMatch(urls, requestURI);

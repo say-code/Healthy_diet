@@ -28,6 +28,7 @@ public class DishFlavor implements Serializable {
     //口味数据list
     private String value;
 
+    private String businessId;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

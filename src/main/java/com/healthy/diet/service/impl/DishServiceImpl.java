@@ -28,6 +28,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     @Autowired
     private DishService dishService;
 
+    @Override
     // 由于涉及到对dish、dish_flavor两张表的操作，应该使用 @Transactional 来标注事务
     @Transactional  //  让@Transactional 生效，还需要在启动类添加@EnableTransactionManagement 来开启事务
     public void saveWithFlavor(DishDto dishDto) {
@@ -65,6 +66,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
         return dishDto;
     }
 
+    @Override
     @Transactional
     public void updateWithFlavor(DishDto dishDto) {
         // 更新dish表

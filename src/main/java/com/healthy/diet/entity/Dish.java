@@ -47,6 +47,10 @@ public class Dish implements Serializable {
     //顺序
     private Integer sort;
 
+    private String businessId;
+
+    //1 早餐 2 中餐 3 晚餐
+    private String mealType;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

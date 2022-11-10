@@ -44,7 +44,7 @@ public class BusinessController {
      * @return 公司信息
      */
     @GetMapping("select")
-    public Response businessSelectALL(){
+    public Response businessSelectAll(){
         return Response.success(iBusinessService.businessNameSelectAll());
     }
 }

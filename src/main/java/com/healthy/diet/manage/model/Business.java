@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Business {
-    @JsonIgnore
+
     private String businessId;
 
     private String businessName;

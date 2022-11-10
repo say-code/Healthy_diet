@@ -16,6 +16,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,17 +37,18 @@ public class SetmealController {
     // 当前端传输过来的 JSON数据 与 对应实体类 Setmeal中属性有所不同时，可以使用SetmealDto，
     //   SetmealDto 继承Setmeal，并添加 Setmeal中没有的JSON数据
     @PostMapping
-    @CacheEvict(value = "setmealCache",allEntries = true)
-    public Result<String> save(@RequestBody SetmealDto setmealDto){
+    // @CacheEvict(value = "setmealCache",allEntries = true)
+    public Result<String> save(@RequestBody SetmealDto setmealDto, HttpServletRequest request){
 
         log.info("套餐信息:{}",setmealDto);
+        setmealDto.setBusinessId(request.getSession().getAttribute("businessId").toString());
         setmealService.saveWithDish(setmealDto);
         return Result.success("套餐添加 成功！");
     }
 
     // 套餐Setmeal 分页查询
     @GetMapping("/page")
-    public Result<Page> showPage(int page,int pageSize,String name){
+    public Result<Page> showPage(int page,int pageSize,String name,HttpServletRequest request){
 
         Page<Setmeal> setmealPage = new Page<>(page,pageSize);
         Page<SetmealDto> dtoPage = new Page<>(page,pageSize);
@@ -54,6 +56,7 @@ public class SetmealController {
         LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
         // 根据name 进行 like模糊查询
         queryWrapper.like(name != null,Setmeal::getName,name);
+        queryWrapper.eq(Setmeal::getBusinessId, request.getSession().getAttribute("businessId").toString());
 
         setmealService.page(setmealPage,queryWrapper);
 

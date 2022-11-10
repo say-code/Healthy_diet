@@ -26,6 +26,7 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal>
     @Autowired
     private SetmealDishService setmealDishService;
 
+    @Override
     @Transactional
     public void saveWithDish(SetmealDto setmealDto) {
         // 保存套餐信息，setmeal 执行insert操作
@@ -35,12 +36,13 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal>
         List<SetmealDish> setmealDishes = setmealDto.getSetmealDishes();
         setmealDishes.stream().map((mealDishs)->{
             mealDishs.setSetmealId(setmealDto.getId());
+            mealDishs.setBusinessId(setmealDto.getBusinessId());
             return mealDishs;
         }).collect(Collectors.toList());
-
         setmealDishService.saveBatch(setmealDishes);
     }
 
+    @Override
     // 删除套餐，还要 删除 套餐和菜品的 关联数据
     @Transactional
     public void removeWithDish(List<Long> ids) {

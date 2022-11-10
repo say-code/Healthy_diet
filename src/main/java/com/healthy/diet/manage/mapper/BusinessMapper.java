@@ -1,9 +1,11 @@
 package com.healthy.diet.manage.mapper;
 
+import com.healthy.diet.entity.Employee;
 import com.healthy.diet.manage.model.Business;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author sayCode
@@ -41,5 +43,29 @@ public interface BusinessMapper {
      * @return 是否删除成功
      */
     int businessDeleteByBusinessId(String businessId);
+
+    /**
+     * 统计公司数量
+     * @return 公司数量
+     */
+    Integer businessCount();
+
+    /**
+     * 总彩屏数量统计
+     * @return 总菜品数量
+     */
+    Integer allBusinessDishCount();
+
+    /**
+     * 统计平台总订单量
+     * @return 总订单数量
+     */
+    Integer allOrderCount();
+
+    /**
+     * 查找所有用户信息
+     * @return 用户信息列表
+     */
+    List<Employee> selectAllEmployee();
 
 }

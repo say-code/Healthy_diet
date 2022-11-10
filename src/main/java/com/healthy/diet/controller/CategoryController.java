@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Session;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -21,23 +23,23 @@ public class CategoryController {
 
     // @RequestBody: 将前端回传的JSON数据需要使用@RequestBody 转化为 实体对象
     @PostMapping
-    public Result<String> save(@RequestBody Category category){
+    public Result<String> save(@RequestBody Category category, HttpServletRequest request){
         log.info("category:{}",category);
-
+        category.setBusinessId(request.getSession().getAttribute("businessId").toString());
         categoryService.save(category);
         return Result.success("成功新增分类！");
 
     }
 
     @GetMapping("/page")
-    public Result<Page> showPage(int page,int pageSize){
+    public Result<Page> showPage(int page, int pageSize, HttpServletRequest request){
         Page<Category> pageInfo = new Page<>(page,pageSize);
 
         LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
 
         //  根据 Category对象的sort字段 来排序展示
         queryWrapper.orderByAsc(Category::getSort);
-
+        queryWrapper.eq(Category::getBusinessId,request.getSession().getAttribute("businessId"));
         categoryService.page(pageInfo,queryWrapper);
 
         return Result.success(pageInfo);
@@ -67,11 +69,11 @@ public class CategoryController {
 
     // 根据条件查询分类数据
     @GetMapping("/list")
-    public Result<List<Category>> categoryList(Category category){
+    public Result<List<Category>> categoryList(Category category, HttpServletRequest request){
         LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
-        //  只有当 category.getType()不为空，才会比较 前端传入的category的type和 实体类中 type属性是否相等
+        //  只有当 category.getType()不为空，才会比较前端传入的category的type和 实体类中 type属性是否相等
         queryWrapper.eq(category.getType() != null, Category::getType,category.getType());
-
+        queryWrapper.eq(Category::getBusinessId,request.getSession().getAttribute("businessId"));
         queryWrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
 
         List<Category> list = categoryService.list(queryWrapper);

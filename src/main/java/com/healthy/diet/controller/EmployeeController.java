@@ -83,7 +83,7 @@ public class EmployeeController {
         employee.setBusinessId(request.getSession().getAttribute("businessId").toString());
         // 在新增员工操作中，对员工的密码进行初始化( MD5加密 )
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-
+        employee.setId((System.currentTimeMillis() << 20) | (System.nanoTime() & ~9223372036854251520L));
         // 下面设置 公共属性的值(createTime、updateTime、createUser、updateUser)交给 MyMetaObjectHandler类处理
 //        employee.setCreateTime(LocalDateTime.now());
 //        employee.setUpdateTime(LocalDateTime.now());
@@ -112,7 +112,7 @@ public class EmployeeController {
 //     4、Controller将查询的分页数据 响应给页面
 //     5、页面接收到分页数据并通过前端(ElementUI)的table组件展示到页面上
     @GetMapping("/page")
-    public Result<Page> pageShow(int page,int pageSize,String name){
+    public Result<Page> pageShow(int page,int pageSize,String name, HttpServletRequest request){
         log.info("page = {},pageSize = {},name = {}",page,pageSize,name);
 
         // 创建分页构造器对象
@@ -121,7 +121,8 @@ public class EmployeeController {
         //  构造条件构造器
         LambdaQueryWrapper<Employee> queryWrapper = new LambdaQueryWrapper();
         //   name不为null，才会 比较 getUsername方法和前端传入的name是否匹配 的过滤条件
-        queryWrapper.like(StringUtils.isNotEmpty(name),Employee::getUsername,name);
+        queryWrapper.like(StringUtils.isNotEmpty(name), Employee::getUsername,name);
+        queryWrapper.eq(Employee::getBusinessId, request.getSession().getAttribute("businessId").toString());
         //  根据 更新用户的时间升序 分页展示
 //        queryWrapper.orderByAsc(Employee::getUpdateTime);
 

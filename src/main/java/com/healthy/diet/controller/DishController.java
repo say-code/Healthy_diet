@@ -13,6 +13,8 @@ import com.healthy.diet.dto.DishDto;
 import com.healthy.diet.entity.Category;
 import com.healthy.diet.entity.Dish;
 import com.healthy.diet.entity.DishFlavor;
+import com.healthy.diet.entity.Employee;
+import com.healthy.diet.manage.service.IBusinessService;
 import com.healthy.diet.service.CategoryService;
 import com.healthy.diet.service.DishFlavorService;
 import com.healthy.diet.service.DishService;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -43,15 +46,18 @@ public class DishController {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @PostMapping
-    public Result<String> save(@RequestBody DishDto dishDto){
-        log.info(dishDto.toString());
+    @Autowired
+    private IBusinessService businessService;
 
+    @PostMapping
+    public Result<String> save(@RequestBody DishDto dishDto, HttpServletRequest request){
+        log.info(dishDto.toString());
+        dishDto.setBusinessId(request.getSession().getAttribute("businessId").toString());
         dishService.saveWithFlavor(dishDto);
 
         // 清理 后台修改分类 下面的菜品缓存数据
-        String key = "dish_" + dishDto.getCategoryId() + "_" + dishDto.getStatus();
-        redisTemplate.delete(key);
+        // String key = "dish_" + dishDto.getCategoryId() + "_" + dishDto.getStatus();
+        // redisTemplate.delete(key);
 
         return Result.success("新增菜品操作成功！");
     }
@@ -59,7 +65,7 @@ public class DishController {
     //  分页展示菜品信息
     // dish/page?page=1&pageSize=10&name=122334,name 是搜索框中的输入值
     @GetMapping("/page")
-    public Result<Page> pageShow(int page,int pageSize,String name){
+    public Result<Page> pageShow(@RequestParam("page") int page,@RequestParam("pageSize") int pageSize,String name, @RequestParam("type")Integer type,HttpServletRequest request){
 
         Page<Dish> dishPage = new Page<>(page,pageSize);
         Page<DishDto> dtoPage = new Page<>();
@@ -67,6 +73,14 @@ public class DishController {
         LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
         // 添加过滤条件
         queryWrapper.eq(name != null,Dish::getName,name);
+        queryWrapper.eq(type != null,Dish::getMealType,type);
+        Object businessId = request.getSession().getAttribute("businessId");
+        if (businessId!=null ){
+            if (!"".equals(businessId.toString())){
+                queryWrapper.eq(Dish::getBusinessId, businessId.toString());
+            }
+        }
+
 
         //  执行分页查询
         dishService.page(dishPage,queryWrapper);
@@ -88,6 +102,11 @@ public class DishController {
                dishDto.setCategoryName(category.getName());
            }
 
+           String business = dishDto.getBusinessId();
+           String businessName = businessService.businessNameSelectByBusinessId(business);
+           if (businessName!=null){
+               dishDto.setBusinessName(businessName);
+           }
             return dishDto;
         }).collect(Collectors.toList());
 
@@ -111,7 +130,7 @@ public class DishController {
 
         // 清理 后台修改分类 下面的菜品缓存数据
         String key = "dish_" + dishDto.getCategoryId() + "_" + dishDto.getStatus();
-        redisTemplate.delete(key);
+        // redisTemplate.delete(key);
 
         return Result.success("修改菜品操作成功！");
     }
@@ -134,13 +153,13 @@ public class DishController {
 
     // 根据条件(分类id)查询对应的菜品数据
     @GetMapping("/list")
-    public Result<List<DishDto>> list(Dish dish){
+    public Result<List<DishDto>> list(Dish dish, HttpServletRequest request){
 
         List<DishDto> dishDtoList = null;
         //  根据菜品的分类(湘菜、川菜) 去缓存菜品数据
-        String key = "dish_" + dish.getCategoryId() + "_" + dish.getStatus();
+        // String key = "dish_" + dish.getCategoryId() + "_" + dish.getStatus();
 
-        dishDtoList = (List<DishDto>) redisTemplate.opsForValue().get(key);
+        // dishDtoList = (List<DishDto>) redisTemplate.opsForValue().get(key);
 
         if (dishDtoList != null){
             return Result.success(dishDtoList);
@@ -150,11 +169,12 @@ public class DishController {
         LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
         Long categoryId = dish.getCategoryId();
         queryWrapper.eq(categoryId != null,Dish::getCategoryId,categoryId);
-
+        queryWrapper.eq(Dish::getBusinessId,request.getSession().getAttribute("businessId").toString());
         // status 为 1: 还在售卖的菜品
         queryWrapper.eq(Dish::getStatus,1);
         // 根据sort 属性升序片排列
         queryWrapper.orderByDesc(Dish::getSort);
+
         List<Dish> list = dishService.list(queryWrapper);
 
         dishDtoList = list.stream().map((item) -> {
@@ -183,7 +203,7 @@ public class DishController {
         }).collect(Collectors.toList());
 
         //  将查询到的菜品数据缓存到Redis,并且设置其 查询到的菜品数据有效时间为1小时，其后会清除菜品该菜品数据
-        redisTemplate.opsForValue().set(key,dishDtoList,60L,TimeUnit.MINUTES);
+        // redisTemplate.opsForValue().set(key,dishDtoList,60L,TimeUnit.MINUTES);
         // 注意: 如果RedisConfig中配置了value的 序列化方式，则存储key-value时，value应该是String类型，而非List类型
 
         return Result.success(dishDtoList);
