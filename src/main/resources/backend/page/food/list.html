@@ -74,6 +74,11 @@
             <span style="margin-right: 10px;">￥{{ scope.row.price/100 }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="适合人群">
+          <template slot-scope="scope">
+            <span style="margin-right: 10px;">{{ scope.row.mealType == '1' ? '健康' : scope.row.mealType == '2' ? '减脂' : '三高'}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="售卖状态">
           <template slot-scope="scope">
             <span style="margin-right: 10px;">{{ scope.row.status == '0' ? '停售' : '启售' }}</span>
@@ -160,17 +165,19 @@
         methods: {
           async init () {
             const params = {
+              type: null,
               page: this.page,
               pageSize: this.pageSize,
               name: this.input ? this.input : undefined
             }
+            console.log(params)
             await getDishPage(params).then(res => {
               if (String(res.code) === '1') {
                 this.tableData = res.data.records || []
                 this.counts = res.data.total
               }
             }).catch(err => {
-              this.$message.error('请求出错了：' + err)
+              this.$message.error('请求出错了ya：' + err)
             })
           },
           getImage (image) {

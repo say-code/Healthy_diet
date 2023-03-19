@@ -114,7 +114,12 @@ public class DishController {
         return Result.success(dtoPage);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/pages")
+    public Result<Page> pageShow(@RequestParam("page") int page,@RequestParam("pageSize") int pageSize,String name, HttpServletRequest request) {
+        return pageShow(page, pageSize, name, null, request);
+    }
+
+        @GetMapping("/{id}")
     public Result<DishDto> get(@PathVariable Long id){
 
         DishDto dishDto = dishService.getByDishIdWithFlavor(id);

@@ -1,7 +1,7 @@
 // 查询列表接口
 const getDishPage = (params) => {
   return $axios({
-    url: '/dish/page',
+    url: '/dish/pages',
     method: 'get',
     params
   })

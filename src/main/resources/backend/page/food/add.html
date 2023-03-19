@@ -79,6 +79,15 @@
             >
               <el-option v-for="(item,index) in dishList" :key="index" :label="item.name" :value="item.id" />
             </el-select>
+
+            <el-select
+                    v-model="ruleForm.mealType"
+                    placeholder="请选择餐饮类型"
+            >
+              <el-option  label="健康" value="1" ></el-option>
+              <el-option  label="减脂" value="2" ></el-option>
+              <el-option  label="三高" value="3" ></el-option>
+            </el-select>
           </el-form-item>
         </div>
         <div>
@@ -277,6 +286,7 @@
               'price': '',
               'code': '',
               'image': '',
+              'mealType':'',
               'description': '',
               'dishFlavors': [],
               'status': true,

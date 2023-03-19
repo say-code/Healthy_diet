@@ -132,30 +132,36 @@ public class ManageController {
         List<Business> businessList= businessService.businessNameSelectAll();
         List<Employee> employeeList = employeePage.getRecords();
         List<EmployeeByBusiness> employeeByBusinessesList = new ArrayList<>();
-        for (Employee employee: employeeList
-             ) {
+        employeeList.forEach((employee -> {
             EmployeeByBusiness employeeByBusiness = new EmployeeByBusiness(employee, "");
+
             if ( !"".equals(employeeByBusiness.getEmployee().getBusinessId()) ){
                 System.out.println(employeeByBusiness.getEmployee().getBusinessId());
-                employeeByBusiness.setBusinessName(businessList.stream()
-                        .filter(businessMessage -> employeeByBusiness.getEmployee().getBusinessId().equals(businessMessage.getBusinessId()))
+
+                employeeByBusiness.setBusinessName(businessList
+                        .stream()
+                        .filter(businessMessage ->
+                                    employeeByBusiness
+                                        .getEmployee()
+                                        .getBusinessId()
+                                        .equals(businessMessage.getBusinessId()))
                         .findAny()
                         .orElse(new Business("无","无")).getBusinessName());
             }
             employeeByBusinessesList.add(employeeByBusiness);
+        }));
+        HashMap<String,Object> resultMap = new HashMap<String,Object>(){{
+            put("list",employeeByBusinessesList);
+            put("paper",new HashMap<String, Integer>(2){{
+                put("pageSize",currentPage);
+                put("total",total);
+            }});
+        }};
 
-        }
-        HashMap<String,Object> resultMap = new HashMap<>();
-        HashMap<String, Integer> paperMap = new HashMap<>();
-        paperMap.put("page",currentPage);
-        paperMap.put("pageSize",currentPage);
-        paperMap.put("total",total);
-        resultMap.put("list",employeeByBusinessesList);
-        resultMap.put("paper",paperMap);
-        Result<HashMap<String, Object>> result = new Result<>();
-        result.setCode(200);
-        result.setData(resultMap);
-        result.setMsg("6");
-        return result;
+        return new Result<HashMap<String, Object>>(){{
+            setCode(200);
+            setData(resultMap);
+            setMsg("6");
+        }};
     }
 }

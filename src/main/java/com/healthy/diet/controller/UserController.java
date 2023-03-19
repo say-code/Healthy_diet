@@ -1,8 +1,12 @@
 package com.healthy.diet.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.healthy.diet.common.Result;
+import com.healthy.diet.entity.Employee;
+import com.healthy.diet.entity.EmployeeByBusiness;
 import com.healthy.diet.entity.User;
+import com.healthy.diet.manage.model.Business;
 import com.healthy.diet.service.UserService;
 import com.healthy.diet.utils.ValidateCodeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -11,13 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -35,9 +39,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private RedisTemplate redisTemplate;
 
     // 发送邮箱验证码
     @PostMapping("/sendMsg") // sendMsg
@@ -119,6 +120,44 @@ public class UserController {
         return Result.success("安全退出成功！");
     }
 
+    @PostMapping("/all")
+    public Result<HashMap<String, Object>> getAllUerByPage(@RequestBody HashMap<String, Integer> hashMap){
+        Integer currentPage = hashMap.get("page");
+        Integer pageSize = hashMap.get("pageSize");
+        log.info(String.valueOf(currentPage));
+        Integer total = userService.count();
+        Page<User> userPage = new Page<>(currentPage,pageSize,total);
+        userPage = userService.page(userPage);
+        List<User> userList = userPage.getRecords();
+
+
+        return new Result<HashMap<String, Object>>(){{
+            setCode(200);
+            setData(new HashMap<String,Object>(){{
+                put("list",userList);
+                put("paper",
+                        new HashMap<String, Integer>(2){{
+                            put("pageSize",currentPage);
+                            put("total",total);
+                        }});
+            }});
+            setMsg("6");
+        }};
+    }
+
+    /**
+     * 修改用户信息
+     * @param user user
+     * @return result
+     */
+    @PostMapping("alter")
+    public Result<String> alterUser(@RequestBody User user){
+        userService.saveOrUpdate(user);
+        return new Result<String>(){{
+            setCode(200);
+            setMsg("更新成功");
+        }};
+    }
 
 
 

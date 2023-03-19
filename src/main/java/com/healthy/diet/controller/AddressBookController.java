@@ -31,7 +31,7 @@ public class AddressBookController {
     public Result<AddressBook> save(@RequestBody AddressBook addressBook) {
         addressBook.setUserId(BaseContext.getCurrentId());
         log.info("addressBook:{}", addressBook);
-        addressBookService.save(addressBook);
+        addressBookService.saveOrUpdate(addressBook);
         return Result.success(addressBook);
     }
 
@@ -48,8 +48,17 @@ public class AddressBookController {
         addressBookService.update(wrapper);
 
         addressBook.setIsDefault(1);
+        // System.out.println(addressBook);
         //SQL:update address_book set is_default = 1 where id = ?
-        addressBookService.updateById(addressBook);
+        LambdaUpdateWrapper<AddressBook> wrapper2 = new LambdaUpdateWrapper<>();
+        wrapper2.eq(AddressBook::getUserId, BaseContext.getCurrentId());
+        wrapper2.eq(AddressBook::getId,addressBook.getId());
+        wrapper2.set(AddressBook::getIsDefault, 1);
+        //SQL:update address_book set is_default = 0 where user_id = ?
+        boolean res = addressBookService.update(wrapper2);
+        if (!res){
+            addressBookService.save(addressBook);
+        }
         return Result.success(addressBook);
     }
 
