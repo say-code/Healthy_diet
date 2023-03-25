@@ -54,7 +54,7 @@ while(True):
     cursor4.execute(sql1)
     # print(cursor4.fetchall())
     foods = cursor4.fetchall()
-    print(foods)
+    # print(foods)
     dict = {}
 
     cursor2 = db.cursor()
@@ -65,7 +65,7 @@ while(True):
         if number:
             dict[dishes[ids[0]]] = int(number)
 
-    print(dict)
+    # print(dict)
     def line_markpoint() -> Line:
         c = (
             Bar(init_opts=optX)
@@ -89,8 +89,8 @@ while(True):
             line_markpoint(),
 
         )
-        page.render("F:/桌面/Heathy_diet/target/classes/backend/page/home/chart.html")
-
+        page.render("../../../target/classes/backend/page/home/chart.html")
+    print("执行成功！已生成相关文件，下一次执行将在24h后")
     page_simple_layout()
     db.close()
     cursor.close()
