@@ -1,5 +1,6 @@
 package com.healthy.diet.manage.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.healthy.diet.entity.Employee;
 import com.healthy.diet.manage.model.Business;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * Title: IBusinessService
  * description: 公司信息 Service接口层
  */
-public interface IBusinessService {
+public interface IBusinessService extends IService<Business> {
     /**
      * 插入公司信息
      * @param business 公司信息

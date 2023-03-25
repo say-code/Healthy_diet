@@ -146,7 +146,7 @@ public class ManageController {
                                         .getBusinessId()
                                         .equals(businessMessage.getBusinessId()))
                         .findAny()
-                        .orElse(new Business("无","无")).getBusinessName());
+                        .orElse(new Business("无","无", "无")).getBusinessName());
             }
             employeeByBusinessesList.add(employeeByBusiness);
         }));

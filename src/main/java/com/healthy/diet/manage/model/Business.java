@@ -1,5 +1,6 @@
 package com.healthy.diet.manage.model;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,9 +19,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Business {
-
+    @TableId
     private String businessId;
 
     private String businessName;
+
+    private String businessDesc;
 
 }

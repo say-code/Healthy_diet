@@ -7,13 +7,13 @@ package com.healthy.diet.controller;
 // 4、点击保存按钮，发送Ajax请求，将菜品相关数据 以JSON形式提交到服务器
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.healthy.diet.common.Result;
 import com.healthy.diet.dto.DishDto;
 import com.healthy.diet.entity.Category;
 import com.healthy.diet.entity.Dish;
 import com.healthy.diet.entity.DishFlavor;
-import com.healthy.diet.entity.Employee;
 import com.healthy.diet.manage.service.IBusinessService;
 import com.healthy.diet.service.CategoryService;
 import com.healthy.diet.service.DishFlavorService;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @RestController
@@ -119,7 +118,7 @@ public class DishController {
         return pageShow(page, pageSize, name, null, request);
     }
 
-        @GetMapping("/{id}")
+    @GetMapping("/{id}")
     public Result<DishDto> get(@PathVariable Long id){
 
         DishDto dishDto = dishService.getByDishIdWithFlavor(id);
@@ -212,6 +211,16 @@ public class DishController {
         // 注意: 如果RedisConfig中配置了value的 序列化方式，则存储key-value时，value应该是String类型，而非List类型
 
         return Result.success(dishDtoList);
+    }
+
+    @GetMapping("lists")
+    public Result<List<Dish>> listResultByDish(String businessId){
+        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Dish::getBusinessId, businessId);
+        List<Dish> dishList = dishService.list(queryWrapper);
+
+        return Result.success(dishList);
+
     }
 
     // 改变菜品的销售状态

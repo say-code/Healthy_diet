@@ -1,5 +1,6 @@
 package com.healthy.diet.manage.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.healthy.diet.entity.Employee;
 import com.healthy.diet.manage.model.Business;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,7 +16,7 @@ import java.util.List;
  * description: 公司类Mapper
  */
 @Mapper
-public interface BusinessMapper {
+public interface BusinessMapper extends BaseMapper<Business> {
 
     /**
      * 插入公司信息

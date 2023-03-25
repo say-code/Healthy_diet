@@ -69,11 +69,11 @@ public class CategoryController {
 
     // 根据条件查询分类数据
     @GetMapping("/list")
-    public Result<List<Category>> categoryList(Category category, HttpServletRequest request){
+    public Result<List<Category>> categoryList(Category category, String businessId){
         LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
         //  只有当 category.getType()不为空，才会比较前端传入的category的type和 实体类中 type属性是否相等
         queryWrapper.eq(category.getType() != null, Category::getType,category.getType());
-        queryWrapper.eq(Category::getBusinessId,request.getSession().getAttribute("businessId"));
+        queryWrapper.eq(Category::getBusinessId,businessId);
         queryWrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
 
         List<Category> list = categoryService.list(queryWrapper);

@@ -3,7 +3,9 @@ package com.healthy.diet.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.healthy.diet.common.BaseContext;
 import com.healthy.diet.common.Result;
+import com.healthy.diet.entity.Dish;
 import com.healthy.diet.entity.ShoppingCart;
+import com.healthy.diet.service.DishService;
 import com.healthy.diet.service.ShoppingCartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class ShoppingCartController {
 
     @Autowired
     private ShoppingCartService shoppingCartService;
+
+    @Autowired
+    private DishService dishService;
 
     @PostMapping("/add")
     public Result<ShoppingCart> addToCart(@RequestBody ShoppingCart shoppingCart){
@@ -101,9 +106,15 @@ public class ShoppingCartController {
 
         // 最晚下单的 菜品或套餐在购物车中最先展示
         queryWrapper.orderByDesc(ShoppingCart::getCreateTime);
-        List<ShoppingCart> list = shoppingCartService.list(queryWrapper);
+        List<ShoppingCart> shoppingCartList = shoppingCartService.list(queryWrapper);
+        shoppingCartList.forEach(shoppingCart -> {
+            Dish dish = dishService.getById(shoppingCart.getDishId());
+            shoppingCart.setName(dish.getName());
+            shoppingCart.setImage(dish.getImage());
+            
+        });
 
-        return Result.success(list);
+        return Result.success(shoppingCartList);
     }
 
     @DeleteMapping("/clean")

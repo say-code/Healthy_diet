@@ -3,6 +3,8 @@ package com.healthy.diet.dto;
 import com.healthy.diet.entity.Dish;
 import com.healthy.diet.entity.DishFlavor;
 import lombok.Data;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,4 +21,12 @@ public class DishDto extends Dish {
     private String businessName;
 
     private Integer copies;
+
+    private String description;
+
+    private String name;
+
+    private BigDecimal price;
+
+    private String businessId;
 }

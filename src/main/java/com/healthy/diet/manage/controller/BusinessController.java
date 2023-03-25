@@ -1,5 +1,6 @@
 package com.healthy.diet.manage.controller;
 
+import com.healthy.diet.common.Result;
 import com.healthy.diet.manage.model.Business;
 import com.healthy.diet.manage.model.Response;
 import com.healthy.diet.manage.service.IBusinessService;
@@ -46,5 +47,10 @@ public class BusinessController {
     @GetMapping("select")
     public Response businessSelectAll(){
         return Response.success(iBusinessService.businessNameSelectAll());
+    }
+
+    @GetMapping("{id}")
+    public Result<Business> businessResponse(@PathVariable String id){
+        return Result.success(iBusinessService.getById(id));
     }
 }

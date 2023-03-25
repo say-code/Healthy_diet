@@ -1,5 +1,6 @@
 package com.healthy.diet.manage.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.healthy.diet.entity.Employee;
 import com.healthy.diet.manage.mapper.BusinessMapper;
 import com.healthy.diet.manage.model.Business;
@@ -18,7 +19,7 @@ import java.util.List;
  * description: 公司 信息服务实现层
  */
 @Service
-public class BusinessServiceImpl implements IBusinessService {
+public class BusinessServiceImpl  extends ServiceImpl<BusinessMapper, Business> implements IBusinessService{
 
     @Autowired
     BusinessMapper businessMapper;
