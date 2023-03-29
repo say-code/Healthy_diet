@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +56,13 @@ public class OrderController {
     }
 
 
+    @GetMapping("amount")
+    public Result<List<BigDecimal>> amountByMonth(){
+        return new Result<List<BigDecimal>>(){{
+            setCode(200);
+            setData(ordersService.salesCount());
+        }};
+    }
 //    @PutMapping
 //    public Result<Orders> updataStatus(Orders orders){
 //

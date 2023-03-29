@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -36,11 +38,36 @@ public class OrdersServiceImp extends ServiceImpl<OrdersMapper, Orders>
     @Autowired
     private OrderDetailService orderDetailService;
 
+    @Autowired
+    private OrdersService ordersService;
+
     public List<OrderDetail> getOrderDetailsByOrderId(Long orderId){
         LambdaQueryWrapper<OrderDetail> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(OrderDetail::getOrderId, orderId);
         List<OrderDetail> orderDetailList = orderDetailService.list(queryWrapper);
         return orderDetailList;
+    }
+
+    @Override
+    public List<BigDecimal> salesCount(){
+
+        List<Orders> orders = ordersService.list();
+
+        List<BigDecimal> countList = new ArrayList<>();
+
+        for (int i = 0; i < 12; i++) {
+            countList.add(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_UP));
+        }
+
+        orders.forEach(order -> {
+            int month = order.getOrderTime().getMonth().getValue();
+            BigDecimal value = BigDecimal.valueOf(countList.get(month).floatValue() + order.getAmount().floatValue());
+            value = value.setScale(2, RoundingMode.HALF_UP);
+            countList.set(month, value);
+        });
+
+        return countList;
+
     }
 
 
@@ -124,4 +151,6 @@ public class OrdersServiceImp extends ServiceImpl<OrdersMapper, Orders>
          shoppingCartService.remove(queryWrapper);
 
     }
+
+
 }
