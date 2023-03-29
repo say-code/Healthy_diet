@@ -23,6 +23,7 @@ public class BusinessController {
 
     @Autowired
     private IBusinessService iBusinessService;
+    private Business business;
 
     /**
      * 插入公司数据
@@ -53,4 +54,34 @@ public class BusinessController {
     public Result<Business> businessResponse(@PathVariable String id){
         return Result.success(iBusinessService.getById(id));
     }
+
+    @PostMapping("alter")
+    public Result<String> businessAlter(@RequestBody Business business){
+        Business trulyBusiness = iBusinessService.getById(business.getBusinessId());
+        if (trulyBusiness == null){
+            return Result.error("公司不存在！");
+        }
+        trulyBusiness.setBusinessName(business.getBusinessName());
+        trulyBusiness.setBusinessDesc(business.getBusinessDesc());
+        iBusinessService.updateById(trulyBusiness);
+        return new Result<String>(){{
+            setCode(200);
+            setData("修改成功");
+        }};
+
+    }
+
+    @PostMapping("del")
+    public Result<String> businessdel(@RequestBody Business business){
+        if ( !iBusinessService.removeById(business.getBusinessId()) ){
+            Result.error("公司不存在！");
+        }
+        return new Result<String>(){{
+            setCode(200);
+            setData("修改成功");
+        }};
+
+    }
+
+
 }

@@ -40,7 +40,8 @@ public class LoginCheckFilter implements Filter {
                 "/common/**",
                 "/user/sendMsg",  // 移动端 发送短信
                 "/user/login"    , //
-                "/wx/api/**"
+                "/wx/api/**",
+                "/platform/**"
         };
         // 2、判断本次请求是否需要处理(该次访问是否处于登录状态)
         boolean checkLogin = isMatch(urls, requestURI);

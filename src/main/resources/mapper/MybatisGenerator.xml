@@ -12,12 +12,12 @@
     </resultMap>
 
     <sql id="businessColumnList">
-        business.business_id,business.business_name
+        business.business_id,business.business_name,business.business_desc
     </sql>
 
     <insert id="businessInsert" parameterType="com.healthy.diet.manage.model.Business">
-        insert into business (business_id, business_name)
-        VALUES(#{businessId,jdbcType=VARCHAR},#{businessName,jdbcType=VARCHAR})
+        insert into business (business_id, business_name, business_desc)
+        VALUES(#{businessId,jdbcType=VARCHAR},#{businessName,jdbcType=VARCHAR}, #{businessDesc,jdbcType=VARCHAR})
     </insert>
 
     <select id="businessNameSelectAll" resultMap="BaseResultMap">

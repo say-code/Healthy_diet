@@ -23,6 +23,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         // 将请求路径 /backend/** 映射到 项目静态资源目录 resources/backend 下
         registry.addResourceHandler("/backend/**").addResourceLocations("classpath:/backend/");
         registry.addResourceHandler("/front/**").addResourceLocations("classpath:/front/");
+        registry.addResourceHandler("/platform/**").addResourceLocations("classpath:/platform/");
 
     }
 

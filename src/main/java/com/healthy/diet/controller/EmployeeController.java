@@ -145,6 +145,23 @@ public class EmployeeController {
 
     }
 
+    @PutMapping("update")
+    public Result<String> updates(HttpServletRequest request,@RequestBody Employee employee){
+        log.info(employee.toString());
+
+        // 下面设置 公共属性的值(createTime、updateTime、createUser、updateUser)交给 MyMetaObjectHandler类处理
+//        Long empId = (Long) request.getSession().getAttribute("employee");
+//        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setUpdateUser(empId);
+
+        employeeService.updateById(employee);
+        return new Result<String>(){{
+            setCode(200);
+            setData("修改成功 ");
+        }};
+
+    }
+
     @GetMapping("/{id}")
     public Result<Employee> getById(@PathVariable Long id){
         log.info("根据id修改员工信息。。。。");

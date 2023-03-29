@@ -28,6 +28,8 @@ while(True):
     start = len(datas)-30
     if start < 0:
         start = 0
+
+        
     def bar_datazoom_slider() -> Bar:
         c = (
             Line(init_opts=optX)
@@ -58,13 +60,16 @@ while(True):
     dict = {}
 
     cursor2 = db.cursor()
+    print(dishes)
     for ids in foods:
         sql2 = "select sum(number) from order_detail where dish_id ="+str(ids[0])+";"
+        # print(sql2)
         cursor2.execute(sql2)
         number = cursor2.fetchall()[0][0]
+        # print(number)
         if number:
             dict[dishes[ids[0]]] = int(number)
-
+    # print()
     # print(dict)
     def line_markpoint() -> Line:
         c = (
