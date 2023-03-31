@@ -1,20 +1,27 @@
 package com.healthy.diet.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.healthy.diet.common.Result;
+import com.healthy.diet.dto.OrderDetailDto;
 import com.healthy.diet.dto.OrdersDto;
 import com.healthy.diet.entity.OrderDetail;
 import com.healthy.diet.entity.Orders;
+import com.healthy.diet.manage.service.IBusinessService;
+import com.healthy.diet.service.DishService;
 import com.healthy.diet.service.OrderDetailService;
 import com.healthy.diet.service.OrdersService;
+import com.healthy.diet.service.SetmealDishService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.reflection.wrapper.BaseWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +36,15 @@ public class OrderController {
     @Autowired
     private OrderDetailService orderDetailService;
 
+    @Autowired
+    private DishService dishService;
+
+    @Autowired
+    private IBusinessService businessService;
+
+    @Autowired
+    private SetmealDishService setmealDishService;
+
     @PostMapping("/submit")
     public Result<String> submit(@RequestBody Orders orders) {
 
@@ -42,7 +58,7 @@ public class OrderController {
 
     //    http://localhost:8181/order/page?page=1&pageSize=10&number=11
     @GetMapping("/page")
-    public Result<Page> showPage(int page, int pageSize, Long number,String beginTime,String endTime) {
+    public Result<Page> showPage(Integer page, Integer pageSize, Long number,String beginTime,String endTime) {
 
         Page<Orders> ordersPage = new Page(page, pageSize);
 
@@ -53,6 +69,54 @@ public class OrderController {
 
         ordersService.page(ordersPage, queryWrapper);
         return Result.success(ordersPage);
+    }
+
+    @GetMapping("/all")
+    public Result<Page<OrdersDto>> showAll(Integer page, Integer pageSize) {
+
+        Page<Orders> pageInfo = new Page<>(page,pageSize);
+        Page<OrdersDto> pageDto = new Page<>(page,pageSize);
+        //构造条件查询对象
+        LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();
+        //这里树直接把分页的全部结果查询出来，没有分页条件
+        //添加排序条件，根据更新时间降序排列
+        queryWrapper.orderByDesc(Orders::getOrderTime);
+        this.ordersService.page(pageInfo,queryWrapper);
+
+        //通过OrderId查询对应的OrderDetail
+        // LambdaQueryWrapper<OrderDetail> queryWrapper2 = new LambdaQueryWrapper<>();
+
+        //对OrderDto进行需要的属性赋值
+        List<Orders> records = pageInfo.getRecords();
+        List<OrdersDto> orderDtoList = records.stream().map((item) ->{
+            OrdersDto orderDto = new OrdersDto();
+            //此时的orderDto对象里面orderDetails属性还是空 下面准备为它赋值
+            Long orderId = item.getId();//获取订单id
+            List<OrderDetail> orderDetailList = this.ordersService.getOrderDetailsByOrderId(orderId);
+            BeanUtils.copyProperties(item,orderDto);
+            List<OrderDetailDto> orderDetailDtoList = new ArrayList<>();
+            orderDetailList.forEach(orderDetail -> {
+                OrderDetailDto data = new OrderDetailDto();
+                BeanUtils.copyProperties(orderDetail, data);
+                orderDetailDtoList.add(data);
+            });
+            orderDetailDtoList.forEach(orderDetailDto -> {
+                orderDetailDto.setDishName(dishService.getById(orderDetailDto.getDishId()).getName());
+                orderDetailDto.setBusinessName(businessService.getById(orderDetailDto.getBusinessId()).getBusinessName());
+
+            });
+            //对orderDto进行OrderDetails属性的赋值
+            orderDto.setOrderDetails(orderDetailDtoList);
+            return orderDto;
+        }).collect(Collectors.toList());
+
+        //使用dto的分页有点难度.....需要重点掌握
+        BeanUtils.copyProperties(pageInfo,pageDto,"records");
+        pageDto.setRecords(orderDtoList);
+        return new Result<Page<OrdersDto>>(){{
+            setCode(200);
+            setData(pageDto);
+        }};
     }
 
 
@@ -147,7 +211,18 @@ public class OrderController {
             List<OrderDetail> orderDetailList = this.ordersService.getOrderDetailsByOrderId(orderId);
             BeanUtils.copyProperties(item,orderDto);
             //对orderDto进行OrderDetails属性的赋值
-            orderDto.setOrderDetails(orderDetailList);
+            List<OrderDetailDto> orderDetailDtoList = new ArrayList<>();
+            orderDetailList.forEach(orderDetail -> {
+                OrderDetailDto data = new OrderDetailDto();
+                BeanUtils.copyProperties(orderDetail, data);
+                orderDetailDtoList.add(data);
+            });
+            orderDetailDtoList.forEach(orderDetailDto -> {
+                orderDetailDto.setDishName(dishService.getById(orderDetailDto.getDishId()).getName());
+                orderDetailDto.setBusinessName(businessService.getById(orderDetailDto.getBusinessId()).getBusinessName());
+
+            });
+            orderDto.setOrderDetails(orderDetailDtoList);
             return orderDto;
         }).collect(Collectors.toList());
 
@@ -157,4 +232,15 @@ public class OrderController {
         return Result.success(pageDto);
     }
 
+    @PostMapping("/delete")
+    public Result<String> deleteOrder(@RequestBody Orders orders){
+        LambdaQueryWrapper<OrderDetail> orderDetailQueryWrapper = new LambdaQueryWrapper<>();
+        orderDetailQueryWrapper.eq(OrderDetail::getOrderId, orders.getId());
+        orderDetailService.remove(orderDetailQueryWrapper);
+        ordersService.removeById(orders.getId());
+        return new Result<String>(){{
+            setCode(200);
+            setData("删除成功");
+        }};
+    }
 }

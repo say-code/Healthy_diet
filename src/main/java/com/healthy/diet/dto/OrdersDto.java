@@ -1,6 +1,5 @@
 package com.healthy.diet.dto;
 
-import com.healthy.diet.entity.OrderDetail;
 import com.healthy.diet.entity.Orders;
 import lombok.Data;
 import java.util.List;
@@ -16,6 +15,9 @@ public class OrdersDto extends Orders {
 
     private String consignee;
 
-    private List<OrderDetail> orderDetails;
+    private List<OrderDetailDto> orderDetails;
+
+
+
 
 }

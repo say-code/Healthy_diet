@@ -60,7 +60,7 @@ public class OrdersServiceImp extends ServiceImpl<OrdersMapper, Orders>
         }
 
         orders.forEach(order -> {
-            int month = order.getOrderTime().getMonth().getValue();
+            int month = order.getOrderTime().getMonth().getValue() - 1;
             BigDecimal value = BigDecimal.valueOf(countList.get(month).floatValue() + order.getAmount().floatValue());
             value = value.setScale(2, RoundingMode.HALF_UP);
             countList.set(month, value);
