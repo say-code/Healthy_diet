@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.UUID;
-
+//文件的上传下载
 @RestController
 @RequestMapping("/common")
 @Slf4j

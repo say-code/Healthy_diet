@@ -13,6 +13,7 @@ import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+//菜品分类管理
 @RestController
 @RequestMapping("/category")
 @Slf4j

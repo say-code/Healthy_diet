@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+//购物车管理
 @RestController
 @RequestMapping("/shoppingCart")
 @Slf4j
@@ -87,7 +87,7 @@ public class ShoppingCartController {
         //  如果购物车中 已经存在该菜品或套餐，其数量+1，不存在，就将该购物车数据保存到数据库中
         if (oneCart != null){
             Integer number = oneCart.getNumber();
-            if (number != 0){
+            if (number > 1){
                 oneCart.setNumber(number - 1);
                 shoppingCartService.updateById(oneCart);
             }else {
