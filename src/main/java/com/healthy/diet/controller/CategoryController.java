@@ -81,6 +81,20 @@ public class CategoryController {
 
         return Result.success(list);
     }
+
+    @GetMapping("/lists")
+    public Result<List<Category>> categoryLists(Category category, HttpServletRequest request){
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        //  只有当 category.getType()不为空，才会比较前端传入的category的type和 实体类中 type属性是否相等
+        queryWrapper.eq(category.getType() != null, Category::getType,category.getType());
+        queryWrapper.eq(Category::getBusinessId,request.getSession().getAttribute("businessId"));
+        System.out.println(request.getSession().getAttribute("businessId"));
+        queryWrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
+
+        List<Category> list = categoryService.list(queryWrapper);
+
+        return Result.success(list);
+    }
     // 前端传输到服务端的数据 和实体类中的属性 不是一一对应关系，
     // 需要用到DTO(Data Transfer Object)对象，即数据传输对象，一般用于Controller和Service层之间的数据传输
 

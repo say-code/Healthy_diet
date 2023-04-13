@@ -45,7 +45,7 @@ const queryDishById = (id) => {
 // 获取菜品分类列表
 const getCategoryList = (params) => {
   return $axios({
-    url: '/category/list',
+    url: '/category/lists',
     method: 'get',
     params
   })
