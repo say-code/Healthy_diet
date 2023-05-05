@@ -68,7 +68,10 @@
               placeholder="请填写菜品名称"
               maxlength="20"
             />
+
+
           </el-form-item>
+
           <el-form-item
             label="菜品分类:"
             prop="categoryId"
@@ -100,6 +103,20 @@
               placeholder="请设置菜品价格"
             />
           </el-form-item>
+
+          <el-form-item
+                  label="菜品热量:"
+                  prop="cal"
+          >
+            <el-input
+                    v-model="ruleForm.cal"
+                    placeholder="请填写热量"
+                    maxlength="20"
+            />
+
+
+          </el-form-item>
+
         </div>
         <el-form-item label="口味做法配置:">
           <el-form-item>
