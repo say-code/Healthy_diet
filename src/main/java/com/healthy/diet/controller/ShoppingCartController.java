@@ -111,6 +111,7 @@ public class ShoppingCartController {
             Dish dish = dishService.getById(shoppingCart.getDishId());
             shoppingCart.setName(dish.getName());
             shoppingCart.setImage(dish.getImage());
+            shoppingCart.setCal(dish.getCal());
             
         });
 

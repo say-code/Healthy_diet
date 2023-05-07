@@ -1,5 +1,6 @@
 package com.healthy.diet.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -42,4 +43,7 @@ public class ShoppingCart implements Serializable {
     private String businessId;
 
     private LocalDateTime createTime;
+
+    @TableField(exist = false)
+    private Integer cal;
 }
